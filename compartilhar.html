@@ -2,92 +2,104 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Compartilhar</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#07172a 0%,#02040a 58%,#000 100%);color:#fff;font-family:Arial,Helvetica,sans-serif;padding:18px;display:flex;align-items:center;justify-content:center}
-.box{width:min(460px,100%);background:linear-gradient(145deg,#051629,#02070d);border:1px solid #38bdf8;border-radius:22px;padding:18px;box-shadow:0 0 30px #000}
-h1{margin:0 0 8px;color:#ffd76b;font-size:23px;text-align:center}
-p{color:#9fb2d8;text-align:center;font-size:13px;line-height:1.45}
-textarea{width:100%;height:210px;resize:none;border-radius:16px;border:1px solid #ffd76b;background:#070a10;color:#fff;padding:12px;font-size:15px;line-height:1.35}
-button{display:block;width:100%;border:0;border-radius:15px;padding:15px;margin-top:12px;font-weight:900;font-size:15px;color:#fff}
-.green{background:linear-gradient(135deg,#0b7f3a,#10d26b)}
-.gold{background:linear-gradient(135deg,#b8860b,#ffd76b);color:#160d00}
-.gray{background:#2b3342}
-.small{font-size:12px;color:#9fb2d8;margin-top:12px;text-align:center}
+body{
+  background:#020b18;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  margin:0;
+  padding:20px;
+  min-height:100vh;
+}
+.box{
+  max-width:500px;
+  margin:auto;
+  border:1px solid #38bdf8;
+  border-radius:20px;
+  padding:20px;
+  background:#07172a;
+  box-shadow:0 0 25px #000;
+}
+h1{
+  color:#ffd76b;
+  text-align:center;
+  margin-top:0;
+}
+p{
+  color:#9fb2d8;
+  text-align:center;
+  font-size:14px;
+}
+textarea{
+  width:100%;
+  height:220px;
+  border-radius:15px;
+  border:2px solid #ffd76b;
+  background:#000;
+  color:#fff;
+  padding:10px;
+  font-size:16px;
+}
+button{
+  width:100%;
+  margin-top:15px;
+  padding:15px;
+  border:none;
+  border-radius:15px;
+  font-size:18px;
+  font-weight:bold;
+}
+.copiar{
+  background:#ffd76b;
+  color:#000;
+}
+.voltar{
+  background:#374151;
+  color:#fff;
+}
 </style>
 </head>
 <body>
 <div class="box">
-  <h1>📲 Compartilhar</h1>
-  <p>Primeiro copie a mensagem. Depois toque em ABRIR WHATSAPP.</p>
-  <textarea id="msg" readonly></textarea>
-
-  <button class="green" onclick="abrirWhatsAppCorrigido()">ABRIR WHATSAPP</button>
-  <button class="gold" onclick="copiarTexto()">COPIAR MENSAGEM</button>
-  <button class="gray" onclick="voltar()">VOLTAR AO APP</button>
-
-  <div class="small">Se o WhatsApp não abrir, a mensagem já fica copiada para colar manualmente.</div>
+<h1>📋 Compartilhar</h1>
+<p>Toque em copiar mensagem, abra o WhatsApp e cole.</p>
+<textarea id="msg" readonly></textarea>
+<button class="copiar" onclick="copiarMensagem()">COPIAR MENSAGEM</button>
+<button class="voltar" onclick="voltar()">VOLTAR AO APP</button>
 </div>
 
 <script>
-function getMensagem(){
-  const params = new URLSearchParams(window.location.search);
-  let msg = params.get('msg') || '';
-  if(!msg){
-    try{ msg = sessionStorage.getItem('KODULAR_SHARE_TEXT') || ''; }catch(e){}
-  }
-  return msg || 'Ranking e Caixa Poker Premium';
-}
+const params = new URLSearchParams(window.location.search);
+let texto = params.get("msg");
 
-const texto = getMensagem();
-document.getElementById('msg').value = texto;
-
-function copiarTexto(){
-  const campo = document.getElementById('msg');
-  campo.focus();
-  campo.select();
-
+if(!texto){
   try{
-    document.execCommand('copy');
-    alert('Mensagem copiada! Agora cole no WhatsApp.');
-    return true;
-  }catch(e){
-    alert(texto);
-    return false;
-  }
-}
-
-function abrirWhatsAppCorrigido(){
-  copiarSemAlerta();
-
-  const encoded = encodeURIComponent(texto);
-
-  // Não usa whatsapp:// porque o Kodular bloqueou.
-  // Tenta abrir pelo link HTTPS oficial do WhatsApp.
-  const url1 = 'https://api.whatsapp.com/send?text=' + encoded;
-  const url2 = 'https://wa.me/?text=' + encoded;
-
-  try{
-    window.location.assign(url1);
-  }catch(e){
-    window.location.href = url2;
-  }
-}
-
-function copiarSemAlerta(){
-  const campo = document.getElementById('msg');
-  campo.focus();
-  campo.select();
-
-  try{
-    document.execCommand('copy');
+    texto = sessionStorage.getItem("KODULAR_SHARE_TEXT");
   }catch(e){}
 }
 
+texto = texto || "Ranking e Caixa Poker Premium";
+document.getElementById("msg").value = texto;
+
+function copiarMensagem(){
+  const campo = document.getElementById("msg");
+  campo.focus();
+  campo.select();
+  campo.setSelectionRange(0,99999);
+
+  try{
+    document.execCommand("copy");
+    alert("Mensagem copiada! Agora abra o WhatsApp e cole.");
+  }catch(e){
+    alert(texto);
+  }
+}
+
 function voltar(){
-  window.location.href = 'index.html';
+  window.location.href = "index.html";
 }
 </script>
 </body>
