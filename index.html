@@ -154,5 +154,16 @@ function importBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileRead
 function openReset(){$('senha').value='';$('erroSenha').innerText='';$('reset').classList.add('open')}function closeReset(){$('reset').classList.remove('open')}function doReset(){if($('senha').value.trim()!=='6533'){$('erroSenha').innerText='Senha incorreta';return}db={jogadores:[],lancamentos:[],caixa:[]};save();closeReset()}
 initCropEvents();
 render();show('ranking');
+
+function compartilhar(txt){
+  const mensagem = txt || '';
+  try{
+    sessionStorage.setItem('KODULAR_SHARE_TEXT', mensagem);
+  }catch(e){}
+
+  const url = 'compartilhar.html?msg=' + encodeURIComponent(mensagem);
+  window.location.href = url;
+}
+
 </script><!-- V25: corrige clique/seleção do SEM POSIÇÃO e ajusta capa para caber no retângulo. -->
 </body></html>
