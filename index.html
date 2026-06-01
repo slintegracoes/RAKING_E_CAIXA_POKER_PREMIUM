@@ -86,7 +86,7 @@ body{background:radial-gradient(circle at top,#07172a 0%,#02040a 58%,#000 100%)}
 <section id="pg-caixa" class="hidden"><div class="tabs"><button id="cx-md" onclick="setCaixaAba('md')">MENSALIDADE / DIA JOGADO</button><button id="cx-caixa" onclick="setCaixaAba('caixa')">CAIXA</button></div><div id="caixaFormMD" class="card"><div class="title">💰 Mensalidade / Dia Jogado</div><div class="tabs"><button id="tipo-mensalidade" onclick="setTipoMD('mensalidade')">MENSALIDADE</button><button id="tipo-dia" onclick="setTipoMD('dia')">DIA JOGADO</button><button onclick="void(0)" style="opacity:.2"> </button></div><div class="field"><label>Jogador</label><select id="jogadorCaixa"></select></div><div class="row"><div class="field"><label>Data</label><input type="date" id="dataCaixa"></div><div class="field"><label>Valor</label><input type="number" id="valorCaixa"></div></div><div class="field"><label>Status</label><select id="statusCaixa"><option value="pago">Pago</option><option value="pendente">Não pago / Pendente</option></select></div><button class="btn green wide" onclick="addMensalidadeDia()">SALVAR</button></div><div id="caixaFormManual" class="card hidden"><div class="title">🏦 Caixa do Clube</div><div class="row"><div class="field"><label>Tipo</label><select id="tipoManual"><option value="entrada">Entrada</option><option value="saida">Saída</option></select></div><div class="field"><label>Data</label><input type="date" id="dataManual"></div></div><div class="field"><label>Descrição</label><input id="descManual"></div><div class="field"><label>Valor</label><input type="number" id="valorManual"></div><button class="btn blue wide" onclick="addCaixaManual()">SALVAR NO CAIXA</button></div><div class="card"><div class="title">💼 Saldo Único</div><div class="summary"><div class="sum-green"><b>ENTRADAS</b><span id="sumEntrada"></span></div><div class="sum-red"><b>SAÍDAS</b><span id="sumSaida"></span></div><div class="sum-blue"><b>PENDENTES</b><span id="sumPendente"></span></div></div><div class="summary" style="margin-top:8px"><div id="sumSaldoBox" class="sum-positive" style="grid-column:1/-1"><b>SALDO</b><span id="sumSaldo"></span></div></div></div><div id="caixaHist" class="card"><div class="title">📜 Histórico do Caixa</div><div class="filterline"><select id="histCxMes" onchange="render()"></select><select id="histCxAno" onchange="render()"></select></div><div id="histCaixa"></div></div></section>
 <section id="pg-config" class="hidden"><div class="card"><div class="title">⚙️ Jogadores</div><input id="novoJogador" placeholder="Nome do jogador">
 <div class="form-photo"><label class="btn blue wide"><input type="file" id="fotoJogador" accept="image/*" style="display:none">📷 COLOCAR FOTO DO JOGADOR</label><div class="filehint">Opcional: a foto aparece no Ranking e no cadastro.</div></div>
-<button class="btn gold wide" onclick="addJogador()">CADASTRAR JOGADOR</button><div id="listaJogadores"></div></div><div class="card"><div class="title">📋 Compartilhar Históricos</div><button class="btn blue wide" onclick="openShare('ranking')">Compartilhar Ranking</button><button class="btn blue wide" onclick="openShare('historico')">Compartilhar Histórico de Jogos</button><button class="btn blue wide" onclick="openShare('mensalidade')">Compartilhar Mensalidade/Dia</button><button class="btn blue wide" onclick="openShare('caixa')">Compartilhar Caixa</button></div><div class="card"><div class="title">💾 Backup</div><button class="btn green wide" onclick="backup()">BAIXAR BACKUP</button><label class="btn blue wide" style="display:block;text-align:center"><input type="file" accept=".json" onchange="importBackup(event)" style="display:none">IMPORTAR BACKUP</label><div class="mini">Salvamento automático local ao sair/atualizar.</div></div><div class="card"><div class="title">🧹 Zerar</div><button class="btn red wide" onclick="openReset()">ZERAR TUDO</button></div></section>
+<button class="btn gold wide" onclick="addJogador()">CADASTRAR JOGADOR</button><div id="listaJogadores"></div></div><div class="card"><div class="title">📋 Compartilhar Históricos</div><button class="btn blue wide" onclick="openShare('ranking')">Compartilhar Ranking</button><button class="btn blue wide" onclick="openShare('historico')">Compartilhar Histórico de Jogos</button><button class="btn blue wide" onclick="openShare('mensalidade')">Compartilhar Mensalidade/Dia</button><button class="btn blue wide" onclick="openShare('caixa')">Compartilhar Caixa</button></div><div class="card"><div class="title">💾 Backup</div><button class="btn green wide" onclick="backup()">BAIXAR BACKUP MANUAL</button><label class="btn blue wide" style="display:block;text-align:center"><input type="file" accept=".json" onchange="importBackup(event)" style="display:none">IMPORTAR BACKUP</label><div class="mini">Backup manual baixa um arquivo JSON. Backup automático salvo ao abrir, sair ou atualizar o app.</div></div><div class="card"><div class="title">🧹 Zerar</div><button class="btn red wide" onclick="openReset()">ZERAR TUDO</button></div></section>
 </div><div class="bottom"><div class="nav"><button id="nav-ranking" onclick="show('ranking')">🏆 Ranking</button><button id="nav-lancar" onclick="show('lancar')">➕ Lançar</button><button id="nav-caixa" onclick="show('caixa')">💰 Caixa</button><button id="nav-config" onclick="show('config')">⚙️ Config</button></div></div>
 
 <div id="cropModal" class="modal"><div class="box"><div class="title">✂️ Cortar foto do jogador</div><div class="mini">Arraste a foto para centralizar. Use o zoom para ajustar o rosto dentro do círculo.</div><div id="cropArea" class="crop-area"><img id="cropImg" alt="Foto para cortar"><div class="crop-mask"></div></div><div class="field"><label>Zoom</label><input id="cropZoom" class="range" type="range" min="1" max="3" step="0.01" value="1"></div><div class="actions"><button class="btn gray" onclick="fecharCrop()">CANCELAR</button><button class="btn green" onclick="salvarCrop()">SALVAR FOTO</button></div></div></div>
@@ -196,15 +196,42 @@ function sendShare(){
 
 
 
-function backup(){
+function montarBackup(motivo){
   const dadosBackup = (typeof db !== 'undefined') ? db : ((typeof dados !== 'undefined') ? dados : {});
-  const texto = JSON.stringify(dadosBackup, null, 2);
-  const nome = 'backup-ranking-poker-' + new Date().toISOString().slice(0,10) + '.json';
+  return {
+    app: 'Ranking Poker Premium',
+    versao: 'V28-backup',
+    motivo: motivo || 'MANUAL',
+    data: new Date().toISOString(),
+    dataBR: new Date().toLocaleString('pt-BR'),
+    jogadores: dadosBackup.jogadores || [],
+    lancamentos: dadosBackup.lancamentos || [],
+    caixa: dadosBackup.caixa || []
+  };
+}
 
+function salvarBackupAutomatico(motivo){
   try{
+    const pacote = montarBackup(motivo || 'AUTOMATICO');
+    const texto = JSON.stringify(pacote, null, 2);
+
     localStorage.setItem('BACKUP_RANKING_POKER_PREMIUM', texto);
-    localStorage.setItem('BACKUP_RANKING_POKER_PREMIUM_DATA', new Date().toLocaleString('pt-BR'));
-  }catch(e){}
+    localStorage.setItem('BACKUP_RANKING_POKER_PREMIUM_DATA', pacote.dataBR);
+    localStorage.setItem(KEY + '_auto', texto);
+
+    let lista = [];
+    try{ lista = JSON.parse(localStorage.getItem('BACKUP_RANKING_POKER_PREMIUM_LISTA')) || []; }catch(e){ lista = []; }
+    lista.unshift({data: pacote.data, dataBR: pacote.dataBR, motivo: pacote.motivo, texto: texto});
+    lista = lista.slice(0, 10);
+    localStorage.setItem('BACKUP_RANKING_POKER_PREMIUM_LISTA', JSON.stringify(lista));
+    return texto;
+  }catch(e){
+    return '';
+  }
+}
+
+function baixarArquivoBackup(texto, nome){
+  let baixou = false;
 
   try{
     const blob = new Blob([texto], {type:'application/json;charset=utf-8'});
@@ -212,24 +239,49 @@ function backup(){
     const a = document.createElement('a');
     a.href = url;
     a.download = nome;
+    a.rel = 'noopener';
     a.style.display = 'none';
     document.body.appendChild(a);
-    a.click();
+
+    const ev = new MouseEvent('click', {bubbles:true, cancelable:true, view:window});
+    a.dispatchEvent(ev);
+    baixou = true;
 
     setTimeout(function(){
       try{ URL.revokeObjectURL(url); }catch(e){}
       try{ document.body.removeChild(a); }catch(e){}
-    }, 1000);
-
-    setTimeout(function(){
-      if(confirm('Se o download não apareceu no Kodular, deseja copiar o backup agora?')){
-        copiarBackupTexto(texto);
-      }
-    }, 700);
-
+    }, 1500);
   }catch(e){
+    baixou = false;
+  }
+
+  if(!baixou){
+    try{
+      const url2 = 'data:application/json;charset=utf-8,' + encodeURIComponent(texto);
+      const w = window.open(url2, '_blank');
+      baixou = !!w;
+    }catch(e){
+      baixou = false;
+    }
+  }
+
+  if(!baixou){
     copiarBackupTexto(texto);
   }
+}
+
+function backup(){
+  try{ save(); }catch(e){}
+
+  const pacote = montarBackup('MANUAL');
+  const texto = JSON.stringify(pacote, null, 2);
+  const agora = new Date();
+  const nome = 'backup-ranking-poker-' + agora.toISOString().slice(0,10) + '-' + String(agora.getHours()).padStart(2,'0') + String(agora.getMinutes()).padStart(2,'0') + '.json';
+
+  salvarBackupAutomatico('MANUAL');
+  baixarArquivoBackup(texto, nome);
+
+  alert('Backup manual gerado. Se estiver no navegador, o arquivo JSON será baixado. No app/WebView, caso o download seja bloqueado, o backup fica salvo automaticamente dentro do aplicativo.');
 }
 
 function copiarBackupTexto(texto){
@@ -261,15 +313,14 @@ function copiarBackupTexto(texto){
 }
 
 function backupAutomatico(){
-  try{
-    const dadosBackup = (typeof db !== 'undefined') ? db : ((typeof dados !== 'undefined') ? dados : {});
-    localStorage.setItem('BACKUP_RANKING_POKER_PREMIUM', JSON.stringify(dadosBackup));
-    localStorage.setItem('BACKUP_RANKING_POKER_PREMIUM_DATA', new Date().toLocaleString('pt-BR'));
-  }catch(e){}
+  salvarBackupAutomatico('SAIR_OU_ATUALIZAR_APP');
 }
 
 window.addEventListener('beforeunload', backupAutomatico);
 window.addEventListener('pagehide', backupAutomatico);
+window.addEventListener('load', function(){
+  salvarBackupAutomatico('APP_ABERTO_OU_ATUALIZADO');
+});
 document.addEventListener('visibilitychange', function(){
   if(document.visibilityState === 'hidden') backupAutomatico();
 });
