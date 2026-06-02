@@ -86,11 +86,12 @@ body{background:radial-gradient(circle at top,#07172a 0%,#02040a 58%,#000 100%)}
 <section id="pg-caixa" class="hidden"><div class="tabs"><button id="cx-md" onclick="setCaixaAba('md')">MENSALIDADE / DIA JOGADO</button><button id="cx-caixa" onclick="setCaixaAba('caixa')">CAIXA</button></div><div id="caixaFormMD" class="card"><div class="title">💰 Mensalidade / Dia Jogado</div><div class="tabs"><button id="tipo-mensalidade" onclick="setTipoMD('mensalidade')">MENSALIDADE</button><button id="tipo-dia" onclick="setTipoMD('dia')">DIA JOGADO</button><button onclick="void(0)" style="opacity:.2"> </button></div><div class="field"><label>Jogador</label><select id="jogadorCaixa"></select></div><div class="row"><div class="field"><label>Data</label><input type="date" id="dataCaixa"></div><div class="field"><label>Valor</label><input type="number" id="valorCaixa"></div></div><div class="field"><label>Status</label><select id="statusCaixa"><option value="pago">Pago</option><option value="pendente">Não pago / Pendente</option></select></div><button class="btn green wide" onclick="addMensalidadeDia()">SALVAR</button></div><div id="caixaFormManual" class="card hidden"><div class="title">🏦 Caixa do Clube</div><div class="row"><div class="field"><label>Tipo</label><select id="tipoManual"><option value="entrada">Entrada</option><option value="saida">Saída</option></select></div><div class="field"><label>Data</label><input type="date" id="dataManual"></div></div><div class="field"><label>Descrição</label><input id="descManual"></div><div class="field"><label>Valor</label><input type="number" id="valorManual"></div><button class="btn blue wide" onclick="addCaixaManual()">SALVAR NO CAIXA</button></div><div class="card"><div class="title">💼 Saldo Único</div><div class="summary"><div class="sum-green"><b>ENTRADAS</b><span id="sumEntrada"></span></div><div class="sum-red"><b>SAÍDAS</b><span id="sumSaida"></span></div><div class="sum-blue"><b>PENDENTES</b><span id="sumPendente"></span></div></div><div class="summary" style="margin-top:8px"><div id="sumSaldoBox" class="sum-positive" style="grid-column:1/-1"><b>SALDO</b><span id="sumSaldo"></span></div></div></div><div id="caixaHist" class="card"><div class="title">📜 Histórico do Caixa</div><div class="filterline"><select id="histCxMes" onchange="render()"></select><select id="histCxAno" onchange="render()"></select></div><div id="histCaixa"></div></div></section>
 <section id="pg-config" class="hidden"><div class="card"><div class="title">⚙️ Jogadores</div><input id="novoJogador" placeholder="Nome do jogador">
 <div class="form-photo"><label class="btn blue wide"><input type="file" id="fotoJogador" accept="image/*" style="display:none">📷 COLOCAR FOTO DO JOGADOR</label><div class="filehint">Opcional: a foto aparece no Ranking e no cadastro.</div></div>
-<button class="btn gold wide" onclick="addJogador()">CADASTRAR JOGADOR</button><div id="listaJogadores"></div></div><div class="card"><div class="title">📋 Compartilhar Históricos</div><button class="btn blue wide" onclick="openShare('ranking')">Compartilhar Ranking</button><button class="btn blue wide" onclick="openShare('historico')">Compartilhar Histórico de Jogos</button><button class="btn blue wide" onclick="openShare('mensalidade')">Compartilhar Mensalidade/Dia</button><button class="btn blue wide" onclick="openShare('caixa')">Compartilhar Caixa</button></div><div class="card"><div class="title">💾 Backup Firebase</div><button class="btn green wide" onclick="backup()">FAZER BACKUP AGORA</button><button class="btn blue wide" onclick="restaurarUltimoBackupManual()">RESTAURAR ÚLTIMO BACKUP</button><div id="firebaseStatus" class="mini" style="margin-top:8px;color:#9fb2d8">Firebase: aguardando.</div><div class="mini">Os dados ficam no Firebase. Ao abrir o app, ele restaura automaticamente o último backup. Ao fechar/atualizar, faz backup automático.</div></div><div class="card"><div class="title">🧹 Zerar</div><button class="btn red wide" onclick="openReset()">ZERAR TUDO</button></div></section>
+<button class="btn gold wide" onclick="addJogador()">CADASTRAR JOGADOR</button><div id="listaJogadores"></div></div><div class="card"><div class="title">📋 Compartilhar Históricos</div><button class="btn blue wide" onclick="openShare('ranking')">Compartilhar Ranking</button><button class="btn blue wide" onclick="openShare('historico')">Compartilhar Histórico de Jogos</button><button class="btn blue wide" onclick="openShare('mensalidade')">Compartilhar Mensalidade/Dia</button><button class="btn blue wide" onclick="openShare('caixa')">Compartilhar Caixa</button></div><div class="card"><div class="title">💾 Backup Firebase</div><button class="btn green wide" onclick="backup()">✅ FAZER BACKUP AGORA</button><button class="btn blue wide" onclick="restaurarUltimoBackupManual()">✅ RESTAURAR BACKUP</button><button class="btn gold wide" onclick="abrirListaBackups()">✅ VER DATAS DOS ÚLTIMOS BACKUPS</button><div id="firebaseStatus" class="mini" style="margin-top:8px;color:#9fb2d8">Backup aguardando.</div><div class="mini">Ao abrir, o app puxa a última atualização. O histórico guarda somente os últimos 100 backups.</div></div><div class="card"><div class="title">🧹 Zerar</div><button class="btn red wide" onclick="openReset()">ZERAR TUDO</button></div></section>
 </div><div class="bottom"><div class="nav"><button id="nav-ranking" onclick="show('ranking')">🏆 Ranking</button><button id="nav-lancar" onclick="show('lancar')">➕ Lançar</button><button id="nav-caixa" onclick="show('caixa')">💰 Caixa</button><button id="nav-config" onclick="show('config')">⚙️ Config</button></div></div>
 
 <div id="cropModal" class="modal"><div class="box"><div class="title">✂️ Cortar foto do jogador</div><div class="mini">Arraste a foto para centralizar. Use o zoom para ajustar o rosto dentro do círculo.</div><div id="cropArea" class="crop-area"><img id="cropImg" alt="Foto para cortar"><div class="crop-mask"></div></div><div class="field"><label>Zoom</label><input id="cropZoom" class="range" type="range" min="1" max="3" step="0.01" value="1"></div><div class="actions"><button class="btn gray" onclick="fecharCrop()">CANCELAR</button><button class="btn green" onclick="salvarCrop()">SALVAR FOTO</button></div></div></div>
 <div id="confirm" class="modal"><div class="box"><div class="title" id="confirmText">Confirmar?</div><div class="actions"><button class="btn red" onclick="doConfirm()">SIM</button><button class="btn green" onclick="closeConfirm()">NÃO</button></div></div></div>
+<div id="backupModal" class="modal"><div class="box"><div class="title">📅 Últimos 100 backups</div><div class="mini">Clique em uma data para restaurar aquele backup.</div><div id="listaBackupsFirebase" style="max-height:360px;overflow:auto;margin-top:10px"></div><button class="btn gray wide" onclick="fecharListaBackups()">FECHAR</button></div></div>
 
 <div id="rankFilter" class="modal"><div class="box"><div class="title">Filtrar Ranking</div><div class="opts" style="grid-template-columns:1fr 1fr"><button onclick="rankFilterPick('mensal')" id="rf-mensal">Mensal</button><button onclick="rankFilterPick('anual')" id="rf-anual">Anual</button></div><div class="filterline"><select id="rankFilterMes"></select><select id="rankFilterAno"></select></div><div class="actions"><button class="btn gray" onclick="closeRankFilter()">CANCELAR</button><button class="btn green" onclick="applyRankFilter()">APLICAR</button></div></div></div>
 <div id="reset" class="modal"><div class="box"><div class="title">🔒 Zerar tudo</div><div class="field"><label>Digite a senha</label><input id="senha" type="password"></div><div class="actions"><button class="btn red" onclick="doReset()">CONFIRMAR</button><button class="btn green" onclick="closeReset()">CANCELAR</button></div><div class="mini" id="erroSenha"></div></div></div>
@@ -198,7 +199,7 @@ function sendShare(){
 /* ===== FIREBASE COMO BANCO PRINCIPAL + BACKUP AUTOMÁTICO =====
    Banco principal: /dados/atual
    Backup atual:    /backups/ultimo
-   Histórico:       /backups/historico/AAAA-MM-DD_HH-MM-SS
+   Histórico:       /backups/historico com no máximo 100 backups
 */
 const FIREBASE_DB_URL = 'https://ranking-e-caixa-poker-premium-default-rtdb.firebaseio.com';
 let ultimoBackupFirebaseMs = 0;
@@ -221,7 +222,7 @@ function normalizarDadosFirebase(pacote){
 
 async function lerFirebase(caminho){
   const resp = await fetch(backupFirebasePath(caminho) + '?t=' + Date.now(), {cache:'no-store'});
-  if(!resp.ok) throw new Error('Erro ao ler ' + caminho + ' - HTTP ' + resp.status);
+  if(!resp.ok) throw new Error('Erro ao realizar backup');
   return resp.json();
 }
 
@@ -232,37 +233,53 @@ async function enviarFirebase(caminho, dados){
     body:JSON.stringify(dados),
     cache:'no-store'
   });
-  if(!resp.ok){
-    let txt='';
-    try{txt=await resp.text();}catch(e){}
-    if(resp.status===401 || resp.status===403){
-      throw new Error('Erro ao acessar Firebase.');
-    }
-    throw new Error('Falha em ' + caminho + ' - HTTP ' + resp.status + ' ' + txt);
-  }
+  if(!resp.ok) throw new Error('Erro ao realizar backup');
   return resp.json().catch(()=>true);
 }
 
+async function apagarFirebase(caminho){
+  const resp = await fetch(backupFirebasePath(caminho), {method:'DELETE', cache:'no-store'});
+  if(!resp.ok) throw new Error('Erro ao realizar backup');
+  return true;
+}
+
 function montarBackup(motivo){
+  const agora = new Date();
   return {
     app:'Ranking Poker Premium',
-    versao:'V29-firebase-principal',
+    versao:'V30-firebase-backup-100',
     motivo:motivo||'MANUAL',
-    data:new Date().toISOString(),
-    dataBR:new Date().toLocaleString('pt-BR'),
+    data:agora.toISOString(),
+    dataBR:agora.toLocaleString('pt-BR'),
+    atualizadoEm:agora.toISOString(),
+    firebaseBackup:true,
     jogadores:db.jogadores||[],
     lancamentos:db.lancamentos||[],
     caixa:db.caixa||[]
   };
 }
 
+function ordenarBackupsHistorico(obj){
+  return Object.entries(obj||{}).map(function(item){
+    const key=item[0];
+    const pacote=item[1]||{};
+    return {key:key, pacote:pacote, data:pacote.atualizadoEm||pacote.data||key, dataBR:pacote.dataBR||key};
+  }).sort(function(a,b){ return String(b.data).localeCompare(String(a.data)); });
+}
+
+async function limparHistoricoBackups(){
+  try{
+    const historico = await lerFirebase('backups/historico');
+    const lista = ordenarBackupsHistorico(historico);
+    const antigos = lista.slice(100);
+    await Promise.all(antigos.map(function(b){ return apagarFirebase('backups/historico/' + b.key); }));
+  }catch(e){ console.error(e); }
+}
+
 function salvarDadosFirebase(motivo){
   if(!appCarregadoFirebase) return;
   const pacote = montarBackup(motivo||'DADOS_ATUAIS');
-  statusFirebase('Firebase: salvando dados...', '#ffd76b');
-  enviarFirebase('dados/atual', pacote).then(function(){
-    statusFirebase('Firebase: dados salvos em /dados/atual', '#39ff93');
-  }).catch(function(err){
+  enviarFirebase('dados/atual', pacote).catch(function(err){
     console.error(err);
     statusFirebase('❌ Erro ao realizar backup', '#ff7373');
   });
@@ -278,8 +295,6 @@ function salvarBackupFirebase(pacote, imediato){
     return;
   }
   ultimoBackupFirebaseMs=agora;
-  pacote.firebaseBackup=true;
-  pacote.atualizadoEm=new Date().toISOString();
   const historicoId=idBackupFirebase();
   if(firebaseSalvando){
     clearTimeout(timerBackupFirebase);
@@ -287,74 +302,139 @@ function salvarBackupFirebase(pacote, imediato){
     return;
   }
   firebaseSalvando=true;
-  statusFirebase('Firebase: fazendo backup...', '#ffd76b');
   Promise.all([
     enviarFirebase('dados/atual', pacote),
     enviarFirebase('backups/ultimo', pacote),
     enviarFirebase('backups/historico/' + historicoId, pacote)
   ]).then(function(){
     statusFirebase('✅ Backup realizado com sucesso', '#39ff93');
+    limparHistoricoBackups();
   }).catch(function(err){
     console.error(err);
     statusFirebase('❌ Erro ao realizar backup', '#ff7373');
   }).finally(function(){ firebaseSalvando=false; });
 }
 
-async function restaurarUltimoBackup(silencioso){
-  statusFirebase('Firebase: carregando último backup...', '#ffd76b');
+async function carregarUltimaAtualizacaoAoAbrir(){
   let pacote = null;
-  try{ pacote = await lerFirebase('backups/ultimo'); }catch(e){ pacote = null; }
+  try{ pacote = await lerFirebase('dados/atual'); }catch(e){ pacote = null; }
   if(!pacote){
-    try{ pacote = await lerFirebase('dados/atual'); }catch(e){ pacote = null; }
+    try{ pacote = await lerFirebase('backups/ultimo'); }catch(e){ pacote = null; }
   }
   if(pacote){
     db = normalizarDadosFirebase(pacote);
     appCarregadoFirebase = true;
     render();
-    statusFirebase('Firebase: último backup restaurado automaticamente', '#39ff93');
-    if(!silencioso) alert('Último backup restaurado do Firebase.');
+    statusFirebase('✅ Última atualização carregada', '#39ff93');
     return true;
   }
   appCarregadoFirebase = true;
   render();
-  statusFirebase('Firebase: nenhum backup encontrado. Pronto para salvar novos dados.', '#ffd76b');
-  if(!silencioso) alert('Nenhum backup encontrado no Firebase.');
+  statusFirebase('Backup aguardando.', '#9fb2d8');
+  return false;
+}
+
+async function restaurarUltimoBackup(silencioso){
+  statusFirebase('Restaurando backup...', '#ffd76b');
+  let pacote = null;
+  try{ pacote = await lerFirebase('backups/ultimo'); }catch(e){ pacote = null; }
+  if(pacote){
+    db = normalizarDadosFirebase(pacote);
+    appCarregadoFirebase = true;
+    render();
+    await enviarFirebase('dados/atual', pacote).catch(()=>{});
+    statusFirebase('✅ Backup restaurado com sucesso', '#39ff93');
+    if(!silencioso) alert('Backup restaurado com sucesso.');
+    return true;
+  }
+  statusFirebase('❌ Erro ao realizar backup', '#ff7373');
+  if(!silencioso) alert('Nenhum backup encontrado.');
   return false;
 }
 
 function restaurarUltimoBackupManual(){ restaurarUltimoBackup(false); }
 
 async function backup(){
-  if(!appCarregadoFirebase){ alert('Aguarde o app carregar o Firebase.'); return; }
-  const pacote = montarBackup('BACKUP_MANUAL_BOTAO_CONFIG');
-  pacote.firebaseBackup=true;
-  pacote.atualizadoEm=new Date().toISOString();
-  const historicoId=idBackupFirebase();
-  statusFirebase('Firebase: fazendo backup manual...', '#ffd76b');
+  if(!appCarregadoFirebase){ alert('Aguarde o app carregar.'); return; }
+  statusFirebase('Fazendo backup...', '#ffd76b');
   try{
+    const pacote = montarBackup('BACKUP_MANUAL_BOTAO_CONFIG');
+    const historicoId=idBackupFirebase();
     await enviarFirebase('dados/atual', pacote);
     await enviarFirebase('backups/ultimo', pacote);
     await enviarFirebase('backups/historico/' + historicoId, pacote);
-    statusFirebase('Firebase: BACKUP MANUAL SALVO com sucesso.', '#39ff93');
-    alert('Backup salvo com sucesso no Firebase.');
+    await limparHistoricoBackups();
+    statusFirebase('✅ Backup realizado com sucesso', '#39ff93');
+    alert('Backup realizado com sucesso.');
   }catch(err){
     console.error(err);
-    statusFirebase('Firebase: ERRO NO BACKUP. ' + (err.message||err), '#ff7373');
-    alert('Erro ao salvar backup no Firebase:\n\n' + (err.message||err));
+    statusFirebase('❌ Erro ao realizar backup', '#ff7373');
+    alert('Erro ao realizar backup.');
   }
 }
 
 function backupAutomatico(){
   if(!appCarregadoFirebase) return;
   const pacote = montarBackup('SAIR_OU_ATUALIZAR_APP');
-  pacote.firebaseBackup=true;
-  pacote.atualizadoEm=new Date().toISOString();
   const historicoId=idBackupFirebase();
   try{
     fetch(backupFirebasePath('dados/atual'), {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(pacote), keepalive:true});
     fetch(backupFirebasePath('backups/ultimo'), {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(pacote), keepalive:true});
     fetch(backupFirebasePath('backups/historico/' + historicoId), {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(pacote), keepalive:true});
   }catch(e){}
+}
+
+async function abrirListaBackups(){
+  const modal=document.getElementById('backupModal');
+  const listaEl=document.getElementById('listaBackupsFirebase');
+  if(modal) modal.classList.add('open');
+  if(listaEl) listaEl.innerHTML='<div class="empty">Carregando backups...</div>';
+  try{
+    const historico = await lerFirebase('backups/historico');
+    const lista = ordenarBackupsHistorico(historico).slice(0,100);
+    if(!lista.length){
+      if(listaEl) listaEl.innerHTML='<div class="empty">Nenhum backup encontrado.</div>';
+      return;
+    }
+    if(listaEl){
+      listaEl.innerHTML = lista.map(function(b,idx){
+        const qtdJ=(b.pacote.jogadores||[]).length;
+        const qtdL=(b.pacote.lancamentos||[]).length;
+        return '<button class="smallbtn wide" style="text-align:left;margin-top:6px" onclick="restaurarBackupEscolhido(\''+b.key+'\')">'+
+          '📅 '+(idx+1)+'. '+(b.dataBR||b.data)+'<br><span style="font-size:10px;color:#9fb2d8">Jogadores: '+qtdJ+' | Lançamentos: '+qtdL+'</span></button>';
+      }).join('');
+    }
+    limparHistoricoBackups();
+  }catch(err){
+    console.error(err);
+    if(listaEl) listaEl.innerHTML='<div class="empty">❌ Erro ao realizar backup</div>';
+  }
+}
+
+function fecharListaBackups(){
+  const modal=document.getElementById('backupModal');
+  if(modal) modal.classList.remove('open');
+}
+
+async function restaurarBackupEscolhido(key){
+  if(!key) return;
+  if(!confirm('Restaurar este backup selecionado?')) return;
+  try{
+    const pacote = await lerFirebase('backups/historico/' + key);
+    if(!pacote) throw new Error('Erro ao realizar backup');
+    db = normalizarDadosFirebase(pacote);
+    appCarregadoFirebase = true;
+    render();
+    await enviarFirebase('dados/atual', pacote);
+    await enviarFirebase('backups/ultimo', pacote);
+    fecharListaBackups();
+    statusFirebase('✅ Backup restaurado com sucesso', '#39ff93');
+    alert('Backup restaurado com sucesso.');
+  }catch(err){
+    console.error(err);
+    statusFirebase('❌ Erro ao realizar backup', '#ff7373');
+    alert('Erro ao realizar backup.');
+  }
 }
 
 window.addEventListener('beforeunload', backupAutomatico);
@@ -364,7 +444,7 @@ document.addEventListener('visibilitychange', function(){ if(document.visibility
 async function iniciarApp(){
   initCropEvents();
   show('ranking');
-  await restaurarUltimoBackup(true);
+  await carregarUltimaAtualizacaoAoAbrir();
 }
 
 function importBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let n=JSON.parse(r.result);db.jogadores=[...db.jogadores,...(n.jogadores||[])];db.lancamentos=[...db.lancamentos,...(n.lancamentos||[])];db.caixa=[...db.caixa,...(n.caixa||[])];save();alert('Backup importado')}catch(err){alert('Arquivo inválido')}};r.readAsText(f)}
